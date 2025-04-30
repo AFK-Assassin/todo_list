@@ -1,0 +1,101 @@
+
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
+{% block content %}
+<!-- Flash Messages -->
+<div class="container my-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show auto-dismiss" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+</div>
+
+ <!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+          <a class="navbar-brand text-white" href="/">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
+              <a class="nav-link active text-white" aria-current="page" href="/about">About</a>
+             
+            </div>
+          </div>
+    </div>
+</nav>
+<div class="container my-5">
+        <form method = 'POST'>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Title</label>
+              <input type="text" class="form-control" name= "title" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Description</label>
+              <input type="text" class="form-control"name = "description" id="exampleInputPassword1">
+            </div>    
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+</div>
+
+
+<div class="container my-5">
+      {% if alltodo|length == 0 %}
+        <div class="alert alert-info" role="alert">
+        No active todo's , add your first todo !!!
+        </div>
+      {% else %}
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">S.No</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Created_at</th>
+                <th scope="col">Modified_at</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for todo in alltodo  %}
+              <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td>{{todo.title}}  </td>
+                <td>{{todo.description}}  </td>
+                <td>{{ todo.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>{{ todo.modified_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                
+                <td>
+                    <a href="/update/{{todo.sno}}" class="btn btn-outline-success">Update</a>
+                    <a href="/delete/{{todo.sno}}" class="btn btn-outline-danger">Delete</a>
+                    
+                </td>
+            </tr>
+            {% endfor %}
+              
+        </tbody>
+    </table>
+        {% endif %}
+</div>
+
+<script>
+  setTimeout(function() {
+    let alerts = document.querySelectorAll('.alert.auto-dismiss');
+    alerts.forEach(function(alert) {
+      let bsAlert = new bootstrap.Alert(alert);
+      bsAlert.close();
+    });
+  }, 3000);
+</script>
+   
+
+
+{% endblock %}
